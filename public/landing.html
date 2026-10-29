@@ -1,0 +1,27 @@
+<!-- public/landing.html -->
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Đang chuyển…</title>
+<style>
+  body { margin:0; height:100vh; display:grid; place-items:center; background:#0b0b0f; color:#e6e6e6; font:15px system-ui }
+  .spud { width:34px; height:34px; border:3px solid #2a2a33; border-top-color:#7fd66b; border-radius:50%; animation:spin .7s linear infinite }
+  @keyframes spin { to { transform:rotate(360deg) } }
+</style>
+</head>
+<body>
+  <div class="spud" aria-label="loading"></div>
+<script>
+(async () => {
+  const token = new URLSearchParams(location.search).get('t');
+  if (!token) return document.body.innerHTML = '<p>Thiếu token.</p>';
+  const r = await fetch('/api/resolve?t=' + encodeURIComponent(token));
+  if (!r.ok) return document.body.innerHTML = '<p>Link hết hạn hoặc bị sửa.</p>';
+  const { target } = await r.json();
+  location.replace(target);
+})();
+</script>
+</body>
+</html>
